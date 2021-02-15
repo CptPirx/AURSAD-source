@@ -1,0 +1,1299 @@
+def movej_wrapper():
+  set_standard_analog_input_domain(0, 1)
+  set_standard_analog_input_domain(1, 1)
+  set_tool_analog_input_domain(0, 1)
+  set_tool_analog_input_domain(1, 1)
+  set_analog_outputdomain(0, 0)
+  set_analog_outputdomain(1, 0)
+  set_input_actions_to_default()
+  set_runstate_standard_digital_outputs([4])
+  set_runstate_standard_digital_output_to_value(4, 1)
+  set_tcp(p[0.153,0.0,0.0956,0.0,1.5708,0.0])
+  set_payload(0.1,[0.0,0.0,0.0])
+  set_tool_communication(True, 1000000, 2, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(0)
+  set_safety_mode_transition_hardness(1)
+  set_gravity([0.0, 0.0, 9.82])
+  global rot2=[0, -90, 90, -90, 0, 180]
+  global rot1=[0, -90, 90, -90, 0, 0]
+  global tool_busy=False
+  global pos1=p[-0.35, -0.132, 0.14, 0.021, 3.13, 0.15]
+  global Line_1=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  global Line_2=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  global Point_1=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  global Point_4=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  # begin: URCap Installation Node
+  #   Source: OnRobot, 5.3.1, OnRobot A/S
+  #   Type: OnRobot Setup
+  if (False):
+    global sd_Achieved_torque = 0
+    global sd_Command_res_msg = 0
+    global sd_Command_results = 0
+    global sd_Process_NOK = 0
+    global sd_Process_OK = 0
+    global sd_Target_torque = 0
+    global sd_Torque_gradient = 0
+  end
+  on_robot_type = 3
+  on_robot_cycle = 2.0
+  on_device_ip = "192.168.1.1"
+  on_device_socket_port = 51234
+  on_xmlrpc = rpc_factory("xmlrpc", "http://192.168.1.1:41414")
+  on_RPC = rpc_factory("xmlrpc", "http://127.0.0.1:31416")
+  ON_DEBUG_LOG = False
+  on_isMetric = True
+  ON_BASE_SHIFT_FLOAT = 24
+  ON_BASE_SHIFT_INT = 24
+  ON_BASE_SHIFT_BOOL = 64
+  ON_COMMON_SHIFT_FLOAT = 12
+  ON_COMMON_SHIFT_INT = 0
+  ON_COMMON_SHIFT_BOOL = 1
+  ON_DEVICE_SHIFT_FLOAT = 3
+  ON_DEVICE_SHIFT_INT = 4
+  ON_DEVICE_SHIFT_BOOL = 7
+  ON_DI_SINGLE = 0
+  ON_DI_PRIMARY = 1
+  ON_DI_SECONDARY = 2
+  ON_DI_DUAL = 3
+  on_toolConnector = False
+  on_ioqc = False
+  on_dual = False
+  on_computebox = True
+  on_ft = False
+  on_hex = False
+  on_gecko = 0
+  cb_robot_cycle = 8
+  on_gripper = [False, False, False]
+  sd_index = 0
+  on_gripper[sd_index] = True
+  #======    OnRobot Globals    ======#
+  
+  ON_MATH_PI=3.141593
+  ON_ZEROPOSE=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  ON_ZEROFRAME=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  ON_ZERO3D=[0.0,0.0,0.0]
+  ON_ZERO6D=[0.0,0.0,0.0,0.0,0.0,0.0]
+  ON_ZERO8D=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
+  ON_FALSE3D=[False,False,False]
+  ON_FALSE6D=[False,False,False,False,False,False]
+  ON_FALSE8D=[False,False,False,False,False,False,False,False]
+  global on_return=0
+  on_speedL=ON_ZERO6D
+  on_speedBase=ON_ZERO6D
+  on_speedVect=ON_ZERO6D
+  on_speedExtra=ON_ZERO6D
+  on_speedDC=ON_ZERO6D
+  on_speedGecko=ON_ZERO6D
+  ON_DEVICE_ID_MISSING=0
+  ON_INIT_TIMEOUT=500
+  on_robot_TCP_offset=ON_ZEROFRAME
+  on_tcp_offset_actual=ON_ZEROFRAME
+  on_cog_actual=ON_ZEROFRAME
+  on_mass_actual=0.0
+  on_robot_mount=[0.0,0.0]
+  
+  #======    End of OnRobot Globals    ======#
+  #======    OnRobot SD Globals    ======#
+  
+  SD_DEVICE_ID=128
+  SD_DIRECTION_IN_BOOL=False
+  sd_torque_arr=ON_ZERO3D
+  sd_force_arr=ON_ZERO3D
+  sd_poz_z_arr=ON_ZERO3D
+  global sd_Achieved_torque=0
+  global sd_Torque_gradient=0
+  global sd_Target_torque=0
+  sd_status_arr=[0,0,0]
+  sd_device_id_arr=[0,0,0]
+  global sd_Command_results=0
+  sd_busy_arr=ON_FALSE3D
+  sd_rot_z_busy_arr=ON_FALSE3D
+  sd_move_z_busy_arr=ON_FALSE3D
+  sd_safety_error_arr=ON_FALSE3D
+  sd_error_arr=ON_FALSE3D
+  global sd_Process_OK=False
+  global sd_Process_NOK=False
+  global sd_Command_results_msg=""
+  
+  global sd_Current_torque=0
+  global sd_Busy=False
+  def get_sd_Current_torque():
+  return sd_Current_torque
+  end 
+  def get_sd_Busy():
+  return sd_Busy
+  end 
+  
+  def get_sd_Target_torque():
+  return sd_Target_torque
+  end 
+  def get_sd_Process_OK():
+  return sd_Process_OK
+  end 
+  def get_sd_Process_NOK():
+  return sd_Process_NOK
+  end 
+  def get_sd_Achieved_torque():
+  return sd_Achieved_torque
+  end 
+  def get_sd_Torque_gradient():
+  return sd_Torque_gradient
+  end 
+  def get_sd_Command_results():
+  return sd_Command_results
+  end 
+  def get_sd_Command_res_msg():
+  return sd_Command_results_msg
+  end 
+  def sd_check_torque(tolerance=0.5):
+  return norm(sd_Achieved_torque-sd_Target_torque)<tolerance
+  end
+  
+  #======    End of OnRobot SD Globals    ======#
+  #======    OnRobot Interface Messages    ======#
+  
+  on_devices_primary_log="OnRobot Devices"
+  on_devices_secondary_log="OnRobot Secondary Device"
+  on_device_error_title="OnRobot - Device error"
+  on_install_error="OnRobot Setup is not correct.<br>Check the status in the OnRobot Setup page in the Installation Tab.<br>Program halted."
+  on_device_missing="No device connected.<br>Program halted."
+  ft_device_missing="No OnRobot F/T sensor connected.<br>Program halted."
+  cb_device_missing="No OnRobot F/T device connected.<br>Program halted."
+  hex_device_missing="No HEX Sensor connected.<br>Program halted."
+  rg2ft_device_missing="No RG2-FT gripper connected.<br>Program halted."
+  rg_device_missing="No RG gripper connected.<br>Program halted."
+  vg_device_missing="No VG gripper connected.<br>Program halted."
+  gg_device_missing="No Gecko Gripper connected.<br>Program halted."
+  sg_device_missing="No Soft Gripper connected.<br>Program halted."
+  tfg_device_missing="No 3FG gripper connected.<br>Program halted."
+  sdr_device_missing="No OnRobot Sander connected.<br>Program halted."
+  on_xmlrpc_start_ip="Connecting to OnRobot XML-RPC Server:"
+  on_java_comm_error_textmsg_title="OnRobot - Communication error:"
+  on_java_comm_controlsocket_open_error="Socket 'javaSocket' opening was unsuccessful."
+  on_java_comm_error_title="OnRobot - Communication error"
+  on_java_comm_socket_open_error="Establishing connection with the URCap was timed out.<br>Check the status in the OnRobot Setup page in the Installation Tab.<br>Program halted."
+  on_rtde_feed_error_textmsg_title="OnRobot - Communication error:"
+  on_rtde_feed_open_error_textmsg="Socket 'rtdeFeed' opening was unsuccessful."
+  on_rtde_feed_error_title="OnRobot - Communication error"
+  on_rtde_feed_open_error="Establishing connection with the devices was timed out.<br>Ensure that the OnRobot devices are operational, and check the status in the OnRobot Setup page in the Installation Tab."
+  
+  #======    End of OnRobot Interface Messages    ======#
+  #======    OnRobot Interface    ======#
+  
+  on_portopened_javaSocket=False
+  on_rtde_feed_opened=False
+  on_dataRead_running=False
+  def on_error(status_flag,message,title,stop_var=False):
+  if(status_flag):
+  popup(message,title=title,error=True,blocking=False)
+  stop_var=True
+  end 
+  return stop_var
+  end 
+  def on_warning(status_flag,message,title):
+  if(status_flag):
+  textmsg(title,message)
+  end 
+  end 
+  def on_missing():
+  popup(on_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def ft_missing():
+  popup(ft_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def cb_missing():
+  popup(ft_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def hex_missing():
+  popup(hex_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def rg2ft_missing():
+  popup(rg2ft_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def rg_missing():
+  popup(rg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def vg_missing():
+  popup(vg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def gg_missing():
+  popup(gg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def sg_missing():
+  popup(sg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def tfg_missing():
+  popup(tfg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def sdr_missing():
+  popup(sdr_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def on_portclose_javaSocket():
+  socket_close("javaSocket")
+  on_portopened_javaSocket=False
+  end 
+  def on_portopen_javaSocket():
+  on_portclose_javaSocket()
+  on_portopened_javaSocket=socket_open("127.0.0.1",44005,"javaSocket")
+  if not on_portopened_javaSocket:
+  textmsg(on_java_comm_error_textmsg_title,on_java_comm_controlsocket_open_error)
+  popup(on_java_comm_socket_open_error,title=on_java_comm_error_title,error=True,blocking=False)
+  halt
+  end 
+  end 
+  def on_rtde_feed_close():
+  socket_close("rtdeFeed")
+  on_rtde_feed_opened=False
+  end 
+  def on_rtde_feed_open():
+  on_rtde_feed_close()
+  on_rtde_feed_opened=socket_open(on_device_ip,on_device_socket_port,"rtdeFeed")
+  if not on_rtde_feed_opened:
+  on_rtde_feed_opened=socket_open(on_device_ip,on_device_socket_port,"rtdeFeed")
+  end 
+  if not on_rtde_feed_opened:
+  textmsg(on_rtde_feed_error_textmsg_title,on_rtde_feed_open_error_textmsg)
+  popup(on_rtde_feed_open_error,title=on_rtde_feed_error_title,error=True,blocking=False)
+  halt
+  end 
+  end 
+  def on_dataRead():
+  enter_critical
+  local reg_offset_float=ON_BASE_SHIFT_FLOAT
+  floatRegDummy=read_input_float_register(reg_offset_float+0)
+  on_speedVect[0]=floatRegDummy
+  floatRegDummy=read_input_float_register(reg_offset_float+1)
+  on_speedVect[1]=floatRegDummy
+  floatRegDummy=read_input_float_register(reg_offset_float+2)
+  on_speedVect[2]=floatRegDummy
+  floatRegDummy=read_input_float_register(reg_offset_float+3)
+  on_speedVect[3]=floatRegDummy
+  floatRegDummy=read_input_float_register(reg_offset_float+4)
+  on_speedVect[4]=floatRegDummy
+  floatRegDummy=read_input_float_register(reg_offset_float+5)
+  on_speedVect[5]=floatRegDummy
+  exit_critical
+  end 
+  def on_set_rtde_watchdog(updateHz=5,ftWD=False,gripperWD=-1):
+  local update_str=str_cat(" watchdog set to [Hz]: ",updateHz)
+  if ftWD:
+  watchdog_int_reg_str=str_cat("input_int_register_",0+ON_BASE_SHIFT_INT)
+  rtde_set_watchdog(watchdog_int_reg_str,updateHz,"stop")
+  if ON_DEBUG_LOG:
+  textmsg(watchdog_int_reg_str,update_str)
+  end 
+  end 
+  if not(gripperWD<0):
+  if(gripperWD==ON_DI_SINGLE or gripperWD==ON_DI_PRIMARY or gripperWD==ON_DI_DUAL):
+  watchdog_int_reg_str=str_cat("input_int_register_",ON_BASE_SHIFT_INT+ON_COMMON_SHIFT_INT)
+  rtde_set_watchdog(watchdog_int_reg_str,updateHz,"stop")
+  if ON_DEBUG_LOG:
+  textmsg(watchdog_int_reg_str,update_str)
+  end 
+  end 
+  if(gripperWD==ON_DI_SECONDARY or gripperWD==ON_DI_DUAL):
+  watchdog_int_reg_str=str_cat("input_int_register_",ON_BASE_SHIFT_INT+ON_COMMON_SHIFT_INT+ON_DEVICE_SHIFT_INT)
+  rtde_set_watchdog(watchdog_int_reg_str,updateHz,"stop")
+  if ON_DEBUG_LOG:
+  textmsg(watchdog_int_reg_str,update_str)
+  end 
+  end 
+  end 
+  end 
+  def on_speedVect_get():
+  return[on_speedVect[0],on_speedVect[1],on_speedVect[2],on_speedVect[3],on_speedVect[4],on_speedVect[5]]
+  end 
+  def on_speedDC_get():
+  local speedExtra=ON_ZERO6D
+  if on_speedl_for_depthcompensation:
+  speedExtra=[on_speedDC[0],on_speedDC[1],on_speedDC[2],on_speedDC[3],on_speedDC[4],on_speedDC[5]]
+  end 
+  return speedExtra
+  end 
+  def on_speedDC_set(speedDC):
+  on_speedDC=[speedDC[0],speedDC[1],speedDC[2],speedDC[3],speedDC[4],speedDC[5]]
+  end 
+  def on_speedGecko_get():
+  local speedExtra=ON_ZERO6D
+  if on_speedl_for_gecko:
+  speedExtra=[on_speedGecko[0],on_speedGecko[1],on_speedGecko[2],on_speedGecko[3],on_speedGecko[4],on_speedGecko[5]]
+  end 
+  return speedExtra
+  end 
+  def on_speedGecko_set(speedGecko):
+  on_speedGecko=[speedGecko[0],speedGecko[1],speedGecko[2],speedGecko[3],speedGecko[4],speedGecko[5]]
+  end 
+  thread on_dataRead_thread():
+  if ON_DEBUG_LOG:
+  textmsg("Starting on_dataRead thread")
+  end 
+  while on_dataRead_running:
+  sync()
+  on_dataRead()
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Stopping on_dataRead thread")
+  end 
+  end 
+  
+  #======    End of OnRobot Interface    ======#
+  #======    OnRobot QC Setup Tool Connector    ======#
+  
+  def tc_setup_tool():
+  if ON_DEBUG_LOG:
+  textmsg("QC Setup Tool Connector start...")
+  end 
+  set_tool_voltage(24)
+  
+  set_tool_communication(True,1000000,2,1,1.5,3.5)
+  
+  if ON_DEBUG_LOG:
+  textmsg("QC Setup Tool Connector end.")
+  end 
+  end 
+  
+  #======    End of OnRobot QC Setup Tool Connector    ======#
+  
+  #======    End of OnRobot CB Interface Messages    ======#
+  
+  #======    End of OnRobot CB Interface    ======#
+  #======    OnRobot SD Interface    ======#
+  
+  sd_dataRead_running=False
+  def sd_dataRead_RTDE(tool_index=0):
+  local reg_offset_float=ON_BASE_SHIFT_FLOAT+ON_COMMON_SHIFT_FLOAT
+  local reg_offset_int=ON_BASE_SHIFT_INT+ON_COMMON_SHIFT_INT
+  local reg_offset_bool=ON_BASE_SHIFT_BOOL+ON_COMMON_SHIFT_BOOL
+  if(tool_index==ON_DI_SECONDARY):
+  reg_offset_float=reg_offset_float+ON_DEVICE_SHIFT_FLOAT
+  reg_offset_int=reg_offset_int+ON_DEVICE_SHIFT_INT
+  reg_offset_bool=reg_offset_bool+ON_DEVICE_SHIFT_BOOL
+  end 
+  enter_critical
+  floatRegDummy=read_input_float_register(reg_offset_float+0)
+  sd_torque_arr[tool_index]=floatRegDummy
+  floatRegDummy=read_input_float_register(reg_offset_float+1)
+  sd_force_arr[tool_index]=floatRegDummy
+  floatRegDummy=read_input_float_register(reg_offset_float+2)
+  sd_poz_z_arr[tool_index]=floatRegDummy
+  intRegDummy=read_input_integer_register(reg_offset_int+0)
+  sd_device_id_arr[tool_index]=intRegDummy
+  intRegDummy=read_input_integer_register(reg_offset_int+1)
+  sd_status_arr[tool_index]=intRegDummy
+  boolRegDummy=read_input_boolean_register(reg_offset_bool+0)
+  sd_rot_z_busy_arr[tool_index]=boolRegDummy
+  boolRegDummy=read_input_boolean_register(reg_offset_bool+1)
+  sd_move_z_busy_arr[tool_index]=boolRegDummy
+  boolRegDummy=read_input_boolean_register(reg_offset_bool+2)
+  sd_safety_error_arr[tool_index]=boolRegDummy
+  boolRegDummy=read_input_boolean_register(reg_offset_bool+3)
+  sd_error_arr[tool_index]=boolRegDummy
+  exit_critical
+  end 
+  thread sd_dataRead_thread():
+  if ON_DEBUG_LOG:
+  textmsg("Starting sd_dataRead thread")
+  end 
+  while sd_dataRead_running:
+  sync()
+  if(sd_index==ON_DI_DUAL):
+  sd_dataRead_RTDE(ON_DI_PRIMARY)
+  sd_dataRead_RTDE(ON_DI_SECONDARY)
+  else:
+  sd_dataRead_RTDE(sd_index)
+  end 
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Stopping sd_dataRead thread")
+  end 
+  end 
+  thread sd_start_watchdog_thread():
+  sleep(1)
+  on_set_rtde_watchdog(updateHz=5,gripperWD=sd_index)
+  end 
+  
+  #======    End of OnRobot SD Interface    ======#
+  #======    OnRobot TCP Messages    ======#
+  
+  on_tcp_log_msg_default="OnRobot: Robot TCP Offset set to:"
+  on_tcp_log_msg_primary="OnRobot: Robot TCP Offset set to Primary:"
+  on_tcp_log_msg_secondary="OnRobot: Robot TCP Offset set to Secondary:"
+  
+  #======    End of OnRobot TCP Messages    ======#
+  #======    OnRobot TCP    ======#
+  
+  on_tcp_offset_actual=ON_ZEROFRAME
+  on_tcp_offset_primary=ON_ZEROFRAME
+  on_tcp_static_primary=ON_ZEROFRAME
+  on_tcp_dynamic_primary=ON_ZEROFRAME
+  on_tcp_vision_primary=ON_ZEROFRAME
+  on_tcp_qc_primary=ON_ZEROFRAME
+  on_tcp_base_primary=ON_ZEROFRAME
+  on_tcp_gripper_static_primary=ON_ZEROFRAME
+  on_tcp_tool_primary=ON_ZEROFRAME
+  on_tcp_gripper_dynamic_primary=ON_ZEROFRAME
+  on_tcp_gripper_primary=ON_ZEROFRAME
+  on_tcp_offset_secondary=ON_ZEROFRAME
+  on_tcp_static_secondary=ON_ZEROFRAME
+  on_tcp_dynamic_secondary=ON_ZEROFRAME
+  on_tcp_vision_secondary=ON_ZEROFRAME
+  on_tcp_qc_secondary=ON_ZEROFRAME
+  on_tcp_base_secondary=ON_ZEROFRAME
+  on_tcp_gripper_static_secondary=ON_ZEROFRAME
+  on_tcp_tool_secondary=ON_ZEROFRAME
+  on_tcp_gripper_dynamic_secondary=ON_ZEROFRAME
+  on_tcp_gripper_secondary=ON_ZEROFRAME
+  def on_tcp_update_primary():
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Primary start..")
+  end 
+  on_tcp_gripper_dynamic_primary=p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  enter_critical
+  on_tcp_dynamic_primary=pose_trans(on_tcp_static_primary,on_tcp_gripper_dynamic_primary)
+  on_tcp_offset_primary=pose_trans(on_tcp_dynamic_primary,on_tcp_tool_primary)
+  exit_critical
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Primary end.")
+  end 
+  end 
+  def on_tcp_init_primary():
+  if ON_DEBUG_LOG:
+  textmsg("TCP Init Primary start..")
+  end 
+  enter_critical
+  on_tcp_base_primary=pose_trans(on_tcp_vision_primary,on_tcp_qc_primary)
+  on_tcp_static_primary=pose_trans(on_tcp_base_primary,on_tcp_gripper_static_primary)
+  exit_critical
+  on_tcp_update_primary()
+  if ON_DEBUG_LOG:
+  textmsg("TCP Init Primary end.")
+  end 
+  end 
+  def on_tcp_offset_set(TCP_offset):
+  if ON_DEBUG_LOG:
+  textmsg("TCP Offset set started!")
+  end 
+  on_tcp_offset_send(TCP_offset)
+  if(on_follow_tcp):
+  set_tcp(TCP_offset)
+  end 
+  on_robot_TCP_offset=TCP_offset
+  if ON_DEBUG_LOG:
+  textmsg("TCP Offset set to: ",on_robot_TCP_offset)
+  end 
+  end 
+  def on_tcp_offset_forced_set_actual(isPrimary=True):
+  if(not on_follow_tcp):
+  
+  local tcp_log_msg=on_tcp_log_msg_default
+  
+  textmsg(tcp_log_msg,on_tcp_offset_actual)
+  set_tcp(on_tcp_offset_actual)
+  end 
+  end 
+  def on_tcp_update(isPrimary=True):
+  on_tcp_update_primary()
+  
+  on_tcp_set_actual_to(isPrimary)
+  end 
+  def on_tcp_set_actual_to(isPrimary=True):
+  
+  on_tcp_offset_actual=on_tcp_offset_primary
+  if(on_follow_tcp):
+  textmsg(on_tcp_log_msg_default,on_tcp_offset_actual)
+  end 
+  
+  on_tcp_active_is_primary=isPrimary
+  on_tcp_offset_set(on_tcp_offset_actual)
+  end 
+  def on_tcp_update_tool_primary(tool_offset):
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Tool Primary start..")
+  end 
+  on_tcp_tool_primary=tool_offset
+  on_tcp_update_primary()
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Tool Primary end.")
+  end 
+  end 
+  def on_tcp_tool_rpy_get(xyz=[0.0,0.0,0.0],rpy=[0.0,0.0,0.0]):
+  local rotvec=rpy2rotvec(rpy)
+  local tool_offset=p[xyz[0],xyz[1],xyz[2],rotvec[0],rotvec[1],rotvec[2]]
+  return tool_offset
+  end 
+  
+  def on_tcp_update_tool(tool_offset,tool_index=0):
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Tool start..")
+  end 
+  if(tool_index!=ON_DI_SECONDARY):
+  on_tcp_update_tool_primary(tool_offset)
+  local isPrimary=True
+  
+  end 
+  on_tcp_set_actual_to(isPrimary)
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Tool end.")
+  end 
+  end 
+  
+  #======    End of OnRobot TCP    ======#
+  #======    OnRobot Payload Messages    ======#
+  
+  on_mass_log_msg="OnRobot: Robot Payload Mass set to:"
+  on_cog_log_msg="OnRobot: Robot Payload Center of Gravity set to:"
+  
+  #======    End of OnRobot Payload Messages    ======#
+  #======    OnRobot Payload    ======#
+  
+  on_cog_actual=ON_ZEROFRAME
+  on_mass_actual=0.0
+  on_cog_primary=ON_ZEROFRAME
+  on_cog_L1L2_primary=ON_ZEROFRAME
+  on_mass_primary=0.0
+  on_mass_L1L2_primary=0.0
+  on_cog_vision_primary=ON_ZEROFRAME
+  on_cog_qc_primary=ON_ZEROFRAME
+  on_cog_base_primary=ON_ZEROFRAME
+  on_cog_gripper_primary=ON_ZEROFRAME
+  on_cog_tool_primary=ON_ZEROFRAME
+  on_mass_vision_primary=0.0
+  on_mass_qc_primary=0.0
+  on_mass_base_primary=0.0
+  on_mass_gripper_primary=0.0
+  on_mass_tool_primary=0.0
+  on_cog_secondary=ON_ZEROFRAME
+  on_mass_secondary=0.0
+  on_cog_gripper_secondary=ON_ZEROFRAME
+  on_mass_gripper_secondary=0.0
+  on_cog_tool_secondary=ON_ZEROFRAME
+  on_mass_tool_secondary=0.0
+  ON_LB2KG001=0.45359237/100
+  def on_payload_update_primary():
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Primary start..")
+  end 
+  enter_critical
+  on_mass_primary=on_mass_L1L2_primary+on_mass_tool_primary
+  local massL1L2L3Ratio=on_mass_tool_primary/on_mass_primary
+  local toolAbsCOG=pose_trans(on_tcp_dynamic_primary,on_cog_tool_primary)
+  toolAbsCOG=p[toolAbsCOG[0],toolAbsCOG[1],toolAbsCOG[2],0.0,0.0,0.0]
+  on_cog_primary=interpolate_pose(on_cog_L1L2_primary,toolAbsCOG,massL1L2L3Ratio)
+  on_cog_primary=p[on_cog_primary[0],on_cog_primary[1],on_cog_primary[2],0.0,0.0,0.0]
+  exit_critical
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Primary end.")
+  end 
+  end 
+  def on_payload_init_primary():
+  if ON_DEBUG_LOG:
+  textmsg("Payload Init Primary start..")
+  end 
+  enter_critical
+  on_mass_base_primary=on_mass_vision_primary+on_mass_qc_primary
+  local massL0L1Ratio=on_mass_qc_primary/on_mass_base_primary
+  on_mass_L1L2_primary=on_mass_base_primary+on_mass_gripper_primary
+  local massL1L2Ratio=on_mass_gripper_primary/on_mass_L1L2_primary
+  local qcAbsCOG=pose_trans(on_tcp_vision_primary,on_cog_qc_primary)
+  qcAbsCOG=p[qcAbsCOG[0],qcAbsCOG[1],qcAbsCOG[2],0.0,0.0,0.0]
+  on_cog_base_primary=interpolate_pose(on_cog_vision_primary,qcAbsCOG,massL0L1Ratio)
+  on_cog_base_primary=p[on_cog_base_primary[0],on_cog_base_primary[1],on_cog_base_primary[2],0.0,0.0,0.0]
+  local gripperAbsCOG=pose_trans(on_tcp_base_primary,on_cog_gripper_primary)
+  gripperAbsCOG=p[gripperAbsCOG[0],gripperAbsCOG[1],gripperAbsCOG[2],0.0,0.0,0.0]
+  on_cog_L1L2_primary=interpolate_pose(on_cog_base_primary,gripperAbsCOG,massL1L2Ratio)
+  on_cog_L1L2_primary=p[on_cog_L1L2_primary[0],on_cog_L1L2_primary[1],on_cog_L1L2_primary[2],0.0,0.0,0.0]
+  exit_critical
+  on_payload_update_primary()
+  if ON_DEBUG_LOG:
+  textmsg("Payload Init Primary end.")
+  end 
+  end 
+  def on_payload_update():
+  on_payload_update_primary()
+  
+  on_mass_actual =on_mass_primary
+  on_cog_actual=on_cog_primary
+  
+  on_payload_set_actual()
+  end 
+  def on_payload_set_actual():
+  
+  on_mass_actual =on_mass_primary
+  on_cog_actual=on_cog_primary
+  
+  local CoG=[on_cog_actual[0],on_cog_actual[1],on_cog_actual[2]]
+  on_payload_set(on_mass_actual,CoG)
+  end 
+  def on_payload_update_tool_primary(tool_mass=0,tool_cog=[0.0,0.0,0.0]):
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Tool Primary start..")
+  end 
+  on_cog_tool_primary=p[tool_cog[0],tool_cog[1],tool_cog[2],0.0,0.0,0.0]
+  on_mass_tool_primary=tool_mass
+  on_payload_update_primary()
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Tool Primary end.")
+  end 
+  end 
+  def on_payload_set(mass,CoG):
+  if ON_DEBUG_LOG:
+  textmsg("Payload set started!")
+  end 
+  local center_of_gravity=[CoG[0],CoG[1],CoG[2]]
+  on_payload_send(center_of_gravity,mass)
+  if(on_isMetric):
+  local roundedMass=floor(mass*100+0.5)/100
+  else:
+  local roundedMass=floor(mass/ON_LB2KG001+0.5)*ON_LB2KG001
+  end 
+  set_payload(roundedMass,center_of_gravity)
+  on_mass_actual=roundedMass
+  on_cog_actual=p[CoG[0],CoG[1],CoG[2],0.0,0.0,0.0]
+  if ON_DEBUG_LOG:
+  textmsg("Payload mass, CoG set to: ",str_cat(str_cat(mass,", "),CoG))
+  end 
+  end 
+  
+  def on_payload_update_secondary():
+  end 
+  def on_payload_init_secondary():
+  end 
+  
+  def on_payload_update_tool(tool_mass,tool_cog=[0.0,0.0,0.0],tool_index=0):
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Tool start..")
+  end 
+  if(tool_index!=ON_DI_SECONDARY):
+  on_cog_tool_primary=p[tool_cog[0],tool_cog[1],tool_cog[2],0.0,0.0,0.0]
+  on_mass_tool_primary=tool_mass
+  else:
+  on_cog_tool_secondary=p[tool_cog[0],tool_cog[1],tool_cog[2],0.0,0.0,0.0]
+  on_mass_tool_secondary=tool_mass
+  end 
+  on_payload_update()
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Tool end.")
+  end 
+  end 
+  def on_payload_get_cog2tcp_tool(tool_index=0):
+  if(tool_index!=ON_DI_SECONDARY):
+  local cog_tool=[on_tcp_tool_primary[0],on_tcp_tool_primary[1],on_tcp_tool_primary[2]]
+  else:
+  local cog_tool=[on_tcp_tool_secondary[0],on_tcp_tool_secondary[1],on_tcp_tool_secondary[2]]
+  end 
+  return cog_tool
+  end 
+  
+  #======    End of OnRobot Payload    ======#
+  #======    OnRobot QC TCP    ======#
+  
+  onrobotmini=0
+  
+  
+  
+  #======    End of OnRobot QC TCP    ======#
+  #======    OnRobot FT TCP    ======#
+  
+  def on_tcp_offset_send(TCP_offset):
+  if ON_DEBUG_LOG:
+  textmsg("TCP Offset sending started!")
+  end 
+  local offset=[TCP_offset[0]*1000.0,TCP_offset[1]*1000.0,TCP_offset[2]*1000.0,TCP_offset[3],TCP_offset[4],TCP_offset[5]]
+  on_xmlrpc.cb_tcp(offset)
+  on_robot_TCP_offset=TCP_offset
+  if ON_DEBUG_LOG:
+  textmsg("TCP Offset sent.")
+  end 
+  end 
+  def on_payload_send(CoG,mass):
+  if ON_DEBUG_LOG:
+  textmsg("Payload sending started!")
+  end 
+  local center_of_gravity=[CoG[0]*1000.0,CoG[1]*1000.0,CoG[2]*1000.0]
+  local mount=[on_robot_mount[0]*1000.0,on_robot_mount[1]*1000.0]
+  on_robot_payload_cog=CoG
+  on_robot_payload_mass=mass
+  if ON_DEBUG_LOG:
+  textmsg("Payload sent.")
+  end 
+  end 
+  def cb_get_pose_as_array_mm(pose):
+  return[1000.0*pose[0],1000.0*pose[1],1000.0*pose[2],pose[3],pose[4],pose[5]]
+  end
+  
+  #======    End of OnRobot FT TCP    ======#
+  #======    OnRobot  Speedl    ======#
+  
+  on_speedl_thread_handler=0
+  on_speedl_is_enabled=False
+  on_speedl_is_running=False
+  on_speedl_acc=0.0
+  ft_speedl_hg_caranteen_reached=False
+  ft_speedl_hg_caranteen_safemode=False
+  on_speedl_for_ftcontrol=False
+  on_speedl_for_move=False
+  on_speedl_for_handguide=False
+  on_speedl_for_insertpart=False
+  on_speedl_for_depthcompensation=False
+  on_speedl_for_center=False
+  on_speedl_for_gecko=False
+  on_speedl_acc=10000.0 
+  on_speedl_acc_to_zero=3.0 
+  ON_SPEEDL_FTCONTROL=1
+  ON_SPEEDL_HANDGUIDE=2
+  ON_SPEEDL_TRAJECTORY=3
+  ON_SPEEDL_MOVE=ON_SPEEDL_TRAJECTORY
+  ON_SPEEDL_INSERTPART=4
+  ON_SPEEDL_DEPTHCOMP=5
+  ON_SPEEDL_CENTER=6
+  ON_SPEEDL_GECKO=7
+  def on_speedl_add_extra(speedBase,speedExtra):
+  speedSum=ON_ZERO6D
+  speedBaseP=p[speedBase[0],speedBase[1],speedBase[2],speedBase[3],speedBase[4],speedBase[5]]
+  speedExtraP=p[speedExtra[0],speedExtra[1],speedExtra[2],speedExtra[3],speedExtra[4],speedExtra[5]]
+  speedSumP=pose_add(speedExtraP,speedBaseP)
+  speedSum=[speedSumP[0],speedSumP[1],speedSumP[2],speedSumP[3],speedSumP[4],speedSumP[5]]
+  return speedSum
+  end 
+  
+  thread on_speedl_thread():
+  if ON_DEBUG_LOG:
+  textmsg("Speedl thread started..")
+  end 
+  enter_critical
+  on_speedl_is_running=True
+  on_speedl_is_enabled=True
+  exit_critical
+  on_speedL=ON_ZERO6D
+  on_speedL_last=ON_ZERO6D
+  
+  while on_speedl_is_running:
+  on_speedBase=on_speedVect_get()
+  on_speedL=on_speedBase
+  
+  
+  
+  if on_speedl_is_enabled:
+  if(on_speedL==ON_ZERO6D):
+  on_speedL=[on_speedL_last[0]/100,on_speedL_last[1]/100,on_speedL_last[2]/100,on_speedL_last[3]/100,on_speedL_last[4]/100,on_speedL_last[5]/100]
+  end
+  speedl(on_speedL,a=on_speedl_acc,t=0.001)
+  else:
+  speedl(ON_ZERO6D,a=on_speedl_acc_to_zero,t=0.001)
+  end 
+  on_speedL_last=on_speedL
+  end 
+  
+  on_speedL=ON_ZERO6D
+  if ON_DEBUG_LOG:
+  textmsg("Speedl thread ended.")
+  end 
+  end 
+  def on_speedl_integer_get():
+  local speedl_integer=binary_list_to_integer([on_speedl_for_ftcontrol,on_speedl_for_handguide,on_speedl_for_move,on_speedl_for_insertpart,on_speedl_for_depthcompensation,on_speedl_for_center,on_speedl_for_gecko])
+  return speedl_integer
+  end 
+  def on_speedl_start_for(speedl_id):
+  if(speedl_id==ON_SPEEDL_FTCONTROL):
+  on_speedl_for_ftcontrol=True
+  elif(speedl_id==ON_SPEEDL_HANDGUIDE):
+  on_speedl_for_handguide=True
+  elif(speedl_id==ON_SPEEDL_TRAJECTORY):
+  on_speedl_for_move=True
+  elif(speedl_id==ON_SPEEDL_INSERTPART):
+  on_speedl_for_insertpart=True
+  elif(speedl_id==ON_SPEEDL_DEPTHCOMP):
+  on_speedl_for_depthcompensation=True
+  elif(speedl_id==ON_SPEEDL_CENTER):
+  on_speedl_for_center=True
+  elif(speedl_id==ON_SPEEDL_GECKO):
+  on_speedl_for_gecko=True
+  else:
+  textmsg("Unknown Start speedl ID received: ",speedl_id)
+  end 
+  local speedl_integer=on_speedl_integer_get()
+  if not(speedl_integer==0):
+  if not on_speedl_is_running:
+  on_speedl_thread_handler=run on_speedl_thread()
+  end 
+  end 
+  return on_speedl_is_running
+  end 
+  def on_speedl_stop_for(speedl_id,brake=10,brakeRot=10):
+  if(speedl_id==ON_SPEEDL_FTCONTROL):
+  on_speedl_for_ftcontrol=False
+  elif(speedl_id==ON_SPEEDL_HANDGUIDE):
+  on_speedl_for_handguide=False
+  elif(speedl_id==ON_SPEEDL_TRAJECTORY):
+  on_speedl_for_move=False
+  elif(speedl_id==ON_SPEEDL_INSERTPART):
+  on_speedl_for_insertpart=False
+  elif(speedl_id==ON_SPEEDL_DEPTHCOMP):
+  on_speedl_for_depthcompensation=False
+  on_speedDC_set(ON_ZERO6D)
+  elif(speedl_id==ON_SPEEDL_CENTER):
+  on_speedl_for_center=False
+  elif(speedl_id==ON_SPEEDL_GECKO):
+  on_speedl_for_gecko=False
+  on_speedGecko_set(ON_ZERO6D)
+  else:
+  textmsg("Unknown Stop speedl ID received: ",speedl_id)
+  end 
+  local speedl_integer=on_speedl_integer_get()
+  if(speedl_integer==0):
+  if(on_speedl_is_running):
+  kill on_speedl_thread_handler
+  enter_critical
+  on_speedl_is_running=False
+  exit_critical
+  
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Speedl thread stopped")
+  end 
+  stopl(brake,brakeRot)
+  end 
+  return on_speedl_is_running
+  end 
+  def on_speedl_pause():
+  on_speedl_is_enabled=False
+  return on_speedl_integer_get()
+  end 
+  def on_speedl_resume():
+  on_speedl_is_enabled=True
+  return on_speedl_integer_get()
+  end 
+  def on_wait_ms(time_ms):
+  local sync_time=ceil(norm(time_ms/2.0))
+  while(sync_time>0):
+  sync_time=sync_time-1
+  sync()
+  end
+  end
+  
+  #======    End of OnRobot  Speedl    ======#
+  #======    OnRobot SD Engine Messages    ======#
+  
+  sd_error_title="OnRobot - Screwdriver error"
+  sd_error_title_primary="OnRobot - Screwdriver [1] error" 
+  sd_error_title_secondary="OnRobot - Screwdriver [2] error"
+  sd_device_id_waiting="Waiting for valid OnRobot Screwdriver ID..."
+  sd_device_id_timeout="Waiting for valid OnRobot Screwdriver ID timed out.<br>Program halted."
+  sd_status_error_missing="Communication problem with Screwdriver. Please check the device.<br>Program halted."
+  sd_status_general_error="A screwdriver has an error. Status:"
+  sd_status_safety_error="The Screwdriver went into Safety State. <br>Use the red reset button in the toolbar to enable it."
+  sd_status_error_1="Initialize: Z stall current not reached"
+  sd_status_error_2="Initialize: No Z index mark found"
+  sd_status_error_3="Initialize: Unable to home Z axis"
+  sd_status_error_4="Initialize: Z index placement not ok"
+  sd_status_error_5="Initialize: No index mark found on torque encoders"
+  sd_status_error_6="Initialize: Too big torque difference during initialization"
+  sd_status_error_7="Index mark value has changed"
+  sd_qc_error="Quick Changer error! The Quick Changer Robot side 4.5A must be used"
+  sd_power_supply_error="Power supply error! The Compute Box power supply 5A must be used"
+  sd_cmd_results_0="No additional result data"
+  sd_cmd_results_1="Command unknown"
+  sd_cmd_results_2="Not screwing in"
+  sd_cmd_results_3="Timeout waiting for correct torque (2sec)"
+  sd_cmd_results_4="Torque exceeded unexpected (premature)"
+  sd_cmd_results_5="Unable to loosen screw (maximum torque exceeded)"
+  sd_cmd_results_6="Shank reached the 55mm position"
+  sd_cmd_results_7="Shank obstructed during move"
+  sd_cmd_results_invalid="Invalid sd_Command_results"
+  
+  #======    End of OnRobot SD Engine Messages    ======#
+  #======    OnRobot SD Engine    ======#
+  
+  sd_dataProcess_running=False
+  def sd_check_id_single_device(should_stop=False,tool_index=0):
+  local incorrect_id=sd_device_id_arr[tool_index]!=SD_DEVICE_ID
+  should_stop=on_error(incorrect_id,sd_status_error_missing,sd_error_title,should_stop)
+  return should_stop
+  end 
+  def sd_get_error_message(error_code=0):
+  if(error_code==1):
+  return sd_status_error_1
+  elif(error_code==2):
+  return sd_status_error_2
+  elif(error_code==3):
+  return sd_status_error_3
+  elif(error_code==4):
+  return sd_status_error_4
+  elif(error_code==5):
+  return sd_status_error_5
+  elif(error_code==6):
+  return sd_status_error_6
+  elif(error_code==7): 
+  return sd_status_error_7
+  else:
+  return str_cat(sd_status_general_error,error_code)
+  end
+  end
+  def sd_get_command_results_message(command_results=0):
+  if(command_results==0):
+  return sd_cmd_results_0
+  elif(command_results==1):
+  return sd_cmd_results_1
+  elif(command_results==2):
+  return sd_cmd_results_2
+  elif(command_results==3):
+  return sd_cmd_results_3
+  elif(command_results==4):
+  return sd_cmd_results_4
+  elif(command_results==5):
+  return sd_cmd_results_5
+  elif(command_results==6):
+  return sd_cmd_results_6
+  elif(command_results==7): 
+  return sd_cmd_results_7
+  else:
+  return sd_cmd_results_invalid
+  end
+  end
+  def sd_get_error_title(tool_index=0):
+  if(tool_index==ON_DI_SINGLE):
+  return sd_error_title
+  elif(tool_index==ON_DI_PRIMARY):
+  return sd_error_title_primary
+  elif(tool_index==ON_DI_SECONDARY):
+  return sd_error_title_secondary
+  end
+  end
+  def sd_check_status_error_single_device(should_stop=False,tool_index=0):
+  local error_title=sd_get_error_title(tool_index)
+  local status=sd_status_arr[tool_index]
+  local status_arr=integer_to_binary_list(status)
+  local qc_error=status_arr[8]
+  should_stop=on_error(qc_error,sd_qc_error,error_title,should_stop)
+  local power_error=status_arr[9]
+  should_stop=on_error(power_error,sd_power_supply_error,error_title,should_stop)
+  local power_errors=floor(status/256)*256 
+  local error_code=floor((status-power_errors)/16) 
+  should_stop=on_error(error_code>0,sd_get_error_message(error_code),error_title,should_stop)
+  local safety_problem=sd_safety_error_arr[tool_index]
+  should_stop=on_error(safety_problem,sd_status_safety_error,error_title,should_stop)
+  return should_stop
+  end
+  def sd_check_errors(should_stop=False):
+  enter_critical
+  local tool_index=sd_index
+  if(tool_index==ON_DI_DUAL):
+  should_stop=sd_check_id_single_device(should_stop,ON_DI_PRIMARY)
+  should_stop=sd_check_id_single_device(should_stop,ON_DI_SECONDARY)
+  else:
+  should_stop=sd_check_id_single_device(should_stop,tool_index)
+  end 
+  if(tool_index==ON_DI_DUAL):
+  should_stop=sd_check_status_error_single_device(should_stop,ON_DI_PRIMARY)
+  should_stop=sd_check_status_error_single_device(should_stop,ON_DI_SECONDARY)
+  else:
+  should_stop=sd_check_status_error_single_device(should_stop,tool_index) 
+  end 
+  exit_critical
+  return should_stop
+  end 
+  def sd_command_return(tool_index,partial_result,message):
+  sd_handle_additional_results(tool_index,partial_result)
+  local retval=sd_Command_results
+  if retval!=0:
+  textmsg(message,retval)
+  end 
+  return retval
+  end 
+  def sd_reset_feedback_vars():
+  sd_Command_results=0
+  sd_Process_OK=False
+  sd_Process_NOK=False
+  sd_Achieved_torque=0
+  sd_Torque_gradient=0
+  end 
+  def sd_handle_additional_results(tool_index=0,partial_result=0):
+  if partial_result==0:
+  partial_result=on_xmlrpc.sd_get_command_results(tool_index)
+  end 
+  sd_Command_results=partial_result
+  sd_Command_results_msg=sd_get_command_results_message(partial_result)
+  sd_Process_OK=(sd_Command_results==0)
+  sd_Process_NOK=not sd_Process_OK
+  end 
+  def sd_get_busy_flag(tool_index=0):
+  return sd_rot_z_busy_arr[tool_index]or sd_move_z_busy_arr[tool_index]
+  end 
+  def sd_process_data():
+  enter_critical
+  local tool_index=sd_index
+  if(tool_index==ON_DI_DUAL):
+  sd_Current_torque_primary=sd_torque_arr[ON_DI_PRIMARY]
+  sd_busy_arr[ON_DI_PRIMARY]=sd_get_busy_flag(ON_DI_PRIMARY)
+  sd_Busy_primary=sd_busy_arr[ON_DI_PRIMARY]
+  sd_Current_torque_secondary=sd_torque_arr[ON_DI_SECONDARY]
+  sd_busy_arr[ON_DI_SECONDARY]=sd_get_busy_flag(ON_DI_SECONDARY)
+  sd_Busy_secondary=sd_busy_arr[ON_DI_SECONDARY]
+  else:
+  sd_Current_torque=sd_torque_arr[tool_index]
+  sd_busy_arr[tool_index]=sd_get_busy_flag(tool_index)
+  sd_Busy=sd_busy_arr[tool_index]
+  end 
+  exit_critical
+  end 
+  thread sd_dataProcess_thread():
+  if ON_DEBUG_LOG:
+  textmsg("Starting sd_dataProcess thread")
+  end 
+  while sd_dataProcess_running:
+  sync()
+  local sd_stop=False
+  sd_stop=sd_check_errors(sd_stop)
+  if sd_stop:
+  halt
+  end 
+  sd_process_data()
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Stopping sd_dataProcess thread")
+  end 
+  end 
+  
+  #======    End of OnRobot SD Engine    ======#
+  on_install_tcp = False
+  on_follow_tcp = False
+  textmsg(on_devices_primary_log, ": Quick Changer + Screwdriver + [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]")
+  on_tcp_active_is_primary = True
+  on_tcp_vision_primary = p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  on_cog_vision_primary = p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  on_mass_vision_primary = 0.0
+  on_tcp_qc_primary = p[0.0, 0.0, 0.0136, 0.0, 0.0, 0.0]
+  on_cog_qc_primary = p[0.0, 0.0, 0.004, 0.0, 0.0, 0.0]
+  on_mass_qc_primary = 0.06
+  on_tcp_gripper_static_primary = p[0.153, 0.0, 0.082, 0.0, 1.5708, 0.0]
+  on_cog_gripper_primary = p[0.0, 0.004, 0.050, 0.0, 0.0, 0.0]
+  on_mass_gripper_primary = 2.413
+  on_tcp_tool_primary = p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  on_cog_tool_primary = p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  on_mass_tool_primary = 0.0
+  #======    OnRobot SD Screw In    ======#
+  
+  def sd_tighten(z_force_n,screwing_length_mm,torque_nm,tool_index,timeout_ms=0):
+  sd_reset_feedback_vars()
+  local error_message="sd_tighten returns: "
+  sd_Target_torque=torque_nm
+  local retval=on_xmlrpc.sd_tighten(tool_index,z_force_n,screwing_length_mm+0.0,torque_nm+0.0)
+  if(retval<0):
+  retval=sd_command_return(tool_index,retval,error_message)
+  popup(sd_return_error,title=sd_error_title,warning=True,blocking=True)
+  return retval
+  end 
+  sd_wait_for_busy(tool_index)
+  retval=sd_wait_for_not_busy(tool_index,timeout_ms)
+  if(retval<0):
+  retval=sd_command_return(tool_index,retval,error_message)
+  return retval
+  end 
+  sd_Achieved_torque=on_xmlrpc.sd_get_achieved_torque(tool_index)
+  sd_Torque_gradient=on_xmlrpc.sd_get_torque_gradient(tool_index)
+  retval=sd_command_return(tool_index,retval,error_message)
+  return retval
+  end 
+  
+  #======    End of OnRobot SD Screw In    ======#
+  #======    OnRobot SD Screw Out    ======#
+  
+  def sd_loosen(z_force_n,unscrewing_length_mm,tool_index,timeout_ms=0):
+  sd_reset_feedback_vars()
+  local error_message="sd_loosen returns: "
+  local retval=on_xmlrpc.sd_loosen(tool_index,z_force_n,unscrewing_length_mm+0.0)
+  if(retval<0):
+  retval=sd_command_return(tool_index,retval,error_message)
+  popup(sd_return_error,title=sd_error_title,warning=True,blocking=True)
+  return retval
+  end 
+  sd_wait_for_busy(tool_index)
+  local retval=sd_wait_for_not_busy(tool_index,timeout_ms)
+  if(retval<0):
+  retval=sd_command_return(tool_index,retval,error_message)
+  return retval
+  end 
+  retval=sd_command_return(tool_index,retval,error_message)
+  return retval 
+  end 
+  
+  #======    End of OnRobot SD Screw Out    ======#
+  #======    OnRobot SD Pick    ======#
+  
+  def sd_pick(z_force_n,screw_length_mm,tool_index,timeout_ms=0):
+  sd_reset_feedback_vars()
+  local error_message="sd_pick returns: "
+  local retval=on_xmlrpc.sd_pickup_screw(tool_index,z_force_n,screw_length_mm+0.0)
+  if(retval<0):
+  retval=sd_command_return(tool_index,retval,error_message)
+  popup(sd_return_error,title=sd_error_title,warning=True,blocking=True)
+  return retval
+  end 
+  sd_wait_for_busy(tool_index)
+  local retval=sd_wait_for_not_busy(tool_index,timeout_ms)
+  if(retval<0):
+  retval=sd_command_return(tool_index,retval,error_message)
+  return retval
+  end 
+  retval=sd_command_return(tool_index,retval,error_message)
+  return retval 
+  end 
+  
+  #======    End of OnRobot SD Pick    ======#
+  #======    OnRobot SD Move Z    ======#
+  
+  def sd_move(z_pos_mm,tool_index):
+  sd_reset_feedback_vars()
+  local error_message="sd_move returns: "
+  local retval=on_xmlrpc.sd_move_shank(tool_index,z_pos_mm)
+  if(retval<0):
+  retval=sd_command_return(tool_index,retval,error_message)
+  popup(sd_return_error,title=sd_error_title,warning=True,blocking=True)
+  return retval
+  end 
+  sd_wait_for_busy(tool_index)
+  sd_wait_for_not_busy(tool_index)
+  retval=sd_command_return(tool_index,retval,error_message)
+  return retval
+  end 
+  
+  #======    End of OnRobot SD Move Z    ======#
+  #======    OnRobot SD Stop    ======#
+  
+  def sd_stop(tool_index):
+  local retval=on_xmlrpc.sd_stop(tool_index)
+  if(retval<0):
+  textmsg("sd_stop_return: ",retval)
+  popup(sd_return_error,title=sd_error_title,warning=True,blocking=True)
+  return retval
+  end 
+  sd_wait_for_not_busy(tool_index)
+  return retval
+  end 
+  
+  #======    End of OnRobot SD Stop    ======#
+  #======    OnRobot SD Busy    ======#
+  
+  def sd_wait_for_busy(tool_index=0):
+  local timeout=0
+  while not sd_busy_arr[tool_index]:
+  sleep(0.01)
+  timeout=timeout+1
+  if timeout>50:
+  break
+  end 
+  end 
+  end 
+  def sd_wait_for_not_busy(tool_index=0,timeout_ms=0):
+  use_timeout=timeout_ms>0
+  while sd_busy_arr[tool_index]:
+  if use_timeout:
+  timeout_ms=timeout_ms-on_robot_cycle
+  if timeout_ms<1:
+  sd_stop(tool_index)
+  end 
+  end 
+  sync()
+  end 
+  if use_timeout and timeout_ms<1:
+  return-2
+  end 
+  return 0
+  end 
+  
+  #======    End of OnRobot SD Busy    ======#
+  #======    OnRobot Screwdriver Commands Messages    ======#
+  
+  sd_return_error="OnRobot - Screwdriver command, return value error"
+  
+  #======    End of OnRobot Screwdriver Commands Messages    ======#
+  #======    OnRobot Run    ======#
+  
+  textmsg(on_xmlrpc_start_ip,on_device_ip)
+  on_portopen_javaSocket()
+  sync()
+  on_rtde_feed_open()
+  sync()
+  local gripperWDs=binary_list_to_integer(on_gripper)
+  if gripperWDs==0:
+  gripperWDs=-1
+  else:
+  gripperWDs=floor(gripperWDs/2)
+  end 
+  on_set_rtde_watchdog(updateHz=0.2,ftWD=on_ft,gripperWD=gripperWDs)
+  sync()
+  on_dataRead_running=True
+  sync()
+  on_dataRead_thrd=run on_dataRead_thread()
+  sync()
+  on_tcp_init_primary()
+  on_payload_init_primary()
+  
+  on_tcp_set_actual_to(on_tcp_active_is_primary)
+  if(on_follow_tcp):
+  on_payload_set_actual()
+  end 
+  
+  #======    End of OnRobot Run    ======#
+  #======    OnRobot QC Start    ======#
+  
+  if(on_toolConnector):
+  tc_setup_tool()
+  end 
+  sync()
+  
+  #======    End of OnRobot QC Start    ======#
+  
+  #======    End of OnRobot CB Run    ======#
+  #======    OnRobot SD Run    ======#
+  
+  def sd_wait_for_init(tool_index):
+  local sd_timeout=0
+  while not(sd_device_id_arr[tool_index]==SD_DEVICE_ID):
+  sync()
+  sd_timeout=sd_timeout+1
+  if(sd_timeout>ON_INIT_TIMEOUT):
+  popup(sd_device_id_timeout,sd_error_title,error=True,blocking=False)
+  halt
+  end 
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Identified Screwdriver: ",sd_device_id_arr[tool_index])
+  end 
+  end 
+  sd_dataRead_running=True
+  sync()
+  sd_dataRead_thrd=run sd_dataRead_thread()
+  sync()
+  textmsg(sd_device_id_waiting)
+  if(sd_index==ON_DI_DUAL):
+  sd_wait_for_init(ON_DI_PRIMARY)
+  sd_wait_for_init(ON_DI_SECONDARY)
+  else:
+  sd_wait_for_init(sd_index)
+  end 
+  sync()
+  sd_dataProcess_running=True
+  sync()
+  sd_dataProcess_thrd=run sd_dataProcess_thread()
+  sync()
+  sd_watchdog_start_thrd=run sd_start_watchdog_thread()
+  sync()
+  
+  #======    End of OnRobot SD Run    ======#
+  # end: URCap Installation Node
+end

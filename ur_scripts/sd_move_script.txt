@@ -1,0 +1,4 @@
+def sd_move_wrapper(pos_mm):
+   sd_move(pos_mm,0)
+end
+sd_move_wrapper(50)

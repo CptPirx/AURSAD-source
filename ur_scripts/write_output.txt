@@ -1,0 +1,6 @@
+sec myProg():
+    write_output_float_register(25,modbus_get_signal_status("Current_torque",False))
+    write_output_float_register(24,modbus_get_signal_status("Achieved_torque",False))
+    write_output_float_register(27,modbus_get_signal_status("Torque_angle",False))
+end
+myProg()

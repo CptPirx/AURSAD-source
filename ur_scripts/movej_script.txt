@@ -1,0 +1,7 @@
+def move_j_wrapper():
+   write_output_integer_register(25,1)
+   movej([0.0,-3.14/2,0.0,-3.14/2,0.0,0.0],a=0.5,v=1.0,t=0,r=0)
+   write_output_integer_register(25,2)
+   movej([0.0,-3.14/2,0.0,-3.14/2,0.0,0.0],a=0.5,v=1.0,t=0,r=0)
+end
+move_j_wrapper()
