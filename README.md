@@ -1,4 +1,5 @@
 
+
 # Relevant links
 ## Outputs from UR robot using urinterface
 
@@ -38,7 +39,7 @@ https://pypi.org/project/urinterface/
 ## Run urinterface with URsim
 
 Start the virtual machine, and start the program _URSim UR5_. Clikc on the _Power off_ button in the left corner. A new screen will be shown, with an _On_ button in the middle. Click the _On_ button, then clikc the _Start_ button. The virtual robot should now be on. The status of the robot is shown in the left bottom corner, where the status should now be _Normal_.
-Run the file _run_experiment.py_ in the folder _robot_sim_tests_ and remember to specify the correct IP address of the virtual machine.
+Run the file _run_experiment.py_ in the folder _experiments_ and remember to specify the correct IP address of the virtual machine.
 
 ### Check if everything is working correctly
 
